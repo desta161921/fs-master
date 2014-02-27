@@ -14,7 +14,7 @@ from heapq import heappush, heappop, heapify
 from fslib.configurator import NullTopology, FsConfigurator
 import fslib.common as fscommon
 import random
-
+# from fsdb import pdb as bp
 
 class FsCore(object):
     '''Core simulation object --- handles event scheduling and
@@ -46,6 +46,10 @@ class FsCore(object):
     def progress(self):
         '''Callback for printing simulation timeline progress'''
         complete = (self.now - self.starttime) / float(self.endtime)
+
+	# Debugger can be set inside simulator's code too :-)
+	# bp.set_trace()
+
         self.logger.info('simulation completion: %2.2f' % (complete))
         self.after(self.endtime*self.progtick, 
             'progress indicator', self.progress)
