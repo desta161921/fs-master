@@ -41,7 +41,7 @@ There are a number of example configuration files in the `conf/` directory.  To 
 
 `fs` supports a DOT configuration file syntax as well as a (basically equivalent) JSON syntax.  For now, config file syntax is undocumented; take a look at the examples and our 2011 INFOCOM paper: http://dx.doi.org/10.1109/INFCOM.2011.5935055
 
-To use the OpenFlow extensions (aka fs-sdn), you'll need to clone the POX git repository and point your PYTHONPATH to it.  `fs` currently is only tested with the betta branch (currently default branch) of POX.  Once you've done those things, there are two example configurations in the `conf` folder that should work out-of-the-box:
+To use the OpenFlow extensions (aka fs-sdn), you'll need to clone the POX git repository and point your PYTHONPATH to it.  `fs` currently is only tested with the betta branch of POX.  Once you've done those things, there are two example configurations in the `conf` folder that should work out-of-the-box:
 
     $ git clone git://github.com/noxrepo/pox.git ../pox
     $ export PYTHONPATH=`pwd`/../pox
@@ -84,4 +84,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with fs; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+ston, MA  02110-1301  USA
 

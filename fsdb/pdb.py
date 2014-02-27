@@ -25,7 +25,6 @@ def import_from_stdlib(name):
     pyfile = os.path.join(stdlibdir, name + '.py')
     result = types.ModuleType(name)
     mydict = execfile(pyfile, result.__dict__)
-    print pyfile
     return result
 
 pdb = import_from_stdlib('pdb')

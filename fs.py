@@ -5,6 +5,7 @@ Main class for fs: FsCore
 
 __author__ = 'jsommers@colgate.edu'
 
+
 import sys
 import signal
 import os.path
@@ -13,7 +14,7 @@ from heapq import heappush, heappop, heapify
 from fslib.configurator import NullTopology, FsConfigurator
 import fslib.common as fscommon
 import random
-# from fsdb import pdb as bp
+
 
 class FsCore(object):
     '''Core simulation object --- handles event scheduling and
@@ -27,7 +28,7 @@ class FsCore(object):
             sys.exit(-1)
 
         FsCore.inited = True
-	
+
         self.__debug = debug
         self.__interval = interval
         self.__now = 0.0
@@ -45,10 +46,6 @@ class FsCore(object):
     def progress(self):
         '''Callback for printing simulation timeline progress'''
         complete = (self.now - self.starttime) / float(self.endtime)
-
-	# Debugger can be set inside simulator's code too :-)
-	# bp.set_trace()
-
         self.logger.info('simulation completion: %2.2f' % (complete))
         self.after(self.endtime*self.progtick, 
             'progress indicator', self.progress)
@@ -184,6 +181,11 @@ def main():
     sim = FsCore(options.interval, endtime=options.simtime, debug=options.debug)
     signal.signal(signal.SIGINT, sim.sighandler)
     sys.path.append(".")
+    sim.run(args[0], configonly=options.configonly)
+
+if __name__ == '__main__':
+    main()
+append(".")
     sim.run(args[0], configonly=options.configonly)
 
 if __name__ == '__main__':
