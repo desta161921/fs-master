@@ -28,7 +28,6 @@ class FsSwitchFlowTable(SwitchFlowTable):
 
 class OpenflowSwitch(Node):
     __slots__ = ['flow_table','controller']
-
     def __init__(self, name, measurement_config, **kwargs):
         Node.__init__(self, name, measurement_config, **kwargs)
         self.flow_table = FsSwitchFlowTable()
@@ -158,7 +157,6 @@ class OpenflowSwitch(Node):
                 self.forward(self.controller, ofm, self.controller)
 
                 nexthop = 'controller'
-
         return nexthop
 
     def forward(self, nextnode, message, destnode):

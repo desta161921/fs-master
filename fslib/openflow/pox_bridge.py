@@ -146,7 +146,7 @@ class PoxBridgeSoftwareSwitch(SoftwareSwitch):
 class OpenflowSwitch(Node):
     __slots__ = ['dpid', 'pox_switch', 'controller_name', 'controller_links', 'ipdests', 
                  'interface_to_port_map', 'trafgen_ip', 'autoack', 'trafgen_mac', 'dstmac_cache',
-                 'trace']
+                 'trace','tracePkt']
 
     def __init__(self, name, measurement_config, **kwargs):
         Node.__init__(self, name, measurement_config, **kwargs)
@@ -161,6 +161,7 @@ class OpenflowSwitch(Node):
         self.controller_links = {}
         self.interface_to_port_map = {}
         self.trace = bool(eval(kwargs.get('trace', 'False')))
+	self.tracePkt = bool(eval(kwargs.get('tracePkt','False')))
 
         self.ipdests = PyTricia()
         for prefix in kwargs.get('ipdests','').split():
@@ -231,13 +232,33 @@ class OpenflowSwitch(Node):
         if tableentry is None:
             tableentry = 'No Match'
         self.logger.info("Flow table match for flowlet {} {} {} (packet {}): {}".format(flowlet.srcmac, flowlet.dstmac, str(flowlet), str(pkt), tableentry))
+	
+    def packetInDebugger(self, flowlet, prevnode, destnode, input_intf):
+	''' Packet trace logic to trace at the flowlet level '''
+	# Needs to be changed if controller messages are to be ignored
 
+	input_port = None
+	table_entry = 'No match'
+	actions = None
+	if isinstance(flowlet,PoxFlowlet):
+	    input_port = self.interface_to_port_map[input_intf]
+	    table_entry = self.pox_switch.table.entry_for_packet(flowlet.origpkt, input_port)
+            self.logger.info("'{}' to '{}' using {}:{}. Flow table match for flowlet {} {} {} (packet {}): {}".format(prevnode, destnode, input_intf, input_port, flowlet.srcmac, flowlet.dstmac, str(flowlet), flowlet.origpkt, table_entry))
+	else:
+	    self.logger.info("'{}' to '{}' using {}:{}".format(prevnode, destnode, input_intf, input_port))
+	from fsdb import pdb as bp
+	bp.set_trace()
+	
     def flowlet_arrival(self, flowlet, prevnode, destnode, input_intf=None):
         '''Incoming flowlet: determine whether it's a data plane flowlet or whether it's an OF message
         coming back from the controller'''
+
         if input_intf is None:
             input_intf = self.trafgen_ip
 
+	if self.tracePkt:
+	    self.packetInDebugger(flowlet, prevnode, destnode, input_intf)
+	
         if isinstance(flowlet, OpenflowMessage):
             self.logger.debug("Received from controller: {}".format(flowlet.ofmsg))
             ofmsg = None

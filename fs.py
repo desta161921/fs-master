@@ -189,8 +189,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-append(".")
-    sim.run(args[0], configonly=options.configonly)
-
-if __name__ == '__main__':
-    main()
