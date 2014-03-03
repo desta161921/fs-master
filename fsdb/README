@@ -23,8 +23,8 @@
 - Edit files during dubugging
 - Extensive post-mortem
 - Enable/disable break points on the fly
+- Trace packet through the network
 
 TODO:
  
-- Trace packet through the network by attaching packet metadata
 - Packet replay for pre-/post-config change detection
