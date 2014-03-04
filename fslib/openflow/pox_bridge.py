@@ -236,6 +236,7 @@ class OpenflowSwitch(Node):
     def packetInDebugger(self, flowlet, prevnode, destnode, input_intf):
 	''' Packet trace logic to trace at the flowlet level '''
 	# Needs to be changed if controller messages are to be ignored
+	# Wrote this way because it will be easier to extend this to a replay capability
 
 	input_port = None
 	table_entry = 'No match'

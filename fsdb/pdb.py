@@ -16,11 +16,12 @@ import fancycompleter
 side_effects_free = re.compile(r'^ *[_0-9a-zA-Z\[\].]* *$')
 
 # a global list to keep watched variable
-# forgive me lord for I have sinned - will definitely move this inside class 
+# TODO: bad coding - move this inside class
 g_display_list = {}
 
 def import_from_stdlib(name):
-    import code # arbitrary module which stays in the same dir as pdb
+    # module which stays in the same dir as this file
+    import code 
     stdlibdir, _ = os.path.split(code.__file__)
     pyfile = os.path.join(stdlibdir, name + '.py')
     result = types.ModuleType(name)
@@ -36,6 +37,8 @@ def rebind_globals(func, newglobals=None):
                                  func.func_defaults)
     return newfunc
 
+# default configuration changes can be changed here
+# TODO: write RC file and read from it instead of defaults
 class DefaultConfig:
     prompt = '(fs-sdn-db) > '
     highlight = True
@@ -90,6 +93,8 @@ undefined = Undefined()
 
 class Pdb(pdb.Pdb, ConfigurableClass):
 
+    # For now, there is no RC file. 
+    # TODO: Fix this soon
     DefaultConfig = DefaultConfig
     config_filename = '.pdbrc.py'
 
@@ -104,7 +109,7 @@ class Pdb(pdb.Pdb, ConfigurableClass):
         pdb.Pdb.__init__(self, *args, **kwds)
         self.prompt = self.config.prompt
         self.mycompleter = None
-	# Fix this: Global watch list is bad!
+	# TODO: Fix this - global watch list is bad!
         # self.display_list = {} # frame --> (name --> last seen value)
         self.sticky = self.config.sticky_by_default
         self.sticky_ranges = {} # frame --> (start, end)
@@ -203,7 +208,7 @@ class Pdb(pdb.Pdb, ConfigurableClass):
 
     def refresh_stack(self):
         """
-        Recompute the stack after e.g. show_hidden_frames has been modified
+	Recompute the stack after, for instance, show_hidden_frames has been modified
         """
         self.stack, _ = self.compute_stack(self.fullstack)
         # find the current frame in the new stack
@@ -243,7 +248,6 @@ class Pdb(pdb.Pdb, ConfigurableClass):
                                       colorscheme=self.config.colorscheme)
         self._lexer = PythonLexer()
         return True
-
 
     stack_entry_regexp = re.compile(r'(.*?)\(([0-9]+?)\)(.*)', re.DOTALL)
 
@@ -291,7 +295,7 @@ class Pdb(pdb.Pdb, ConfigurableClass):
             return pdb.Pdb.parseline(self, line)
         # fsdb "smart command mode": don't execute commands if a variable
         # with the name exits in the current contex; this prevents pdb to quit
-        # if you type e.g. 'r[0]' by mistake.
+        # if you type e.g. 'k[0]' by mistake.
         cmd, arg, newline = pdb.Pdb.parseline(self, line)
         if cmd and hasattr(self, 'do_'+cmd) and (cmd in self.curframe.f_globals or
                                                  cmd in self.curframe.f_locals):
@@ -325,8 +329,8 @@ Frames can marked as hidden in the following ways:
     def do_hf_unhide(self, arg):
         """
         {hf_show}
-        unhide hidden frames, i.e. make it possible to ``up`` or ``down``
-        there
+	
+        Unhide hidden frames, i.e., make it visible to ``up`` or ``down``
         """
         self.show_hidden_frames = True
         self.refresh_stack()
@@ -334,7 +338,8 @@ Frames can marked as hidden in the following ways:
     def do_hf_hide(self, arg):
         """
         {hf_hide}
-        (re)hide hidden frames, if they have been unhidden by ``hf_unhide``
+
+        (Re)hide hidden frames, if they have been made visible  by ``hf_unhide``
         """
         self.show_hidden_frames = False
         self.refresh_stack()
@@ -347,15 +352,16 @@ Frames can marked as hidden in the following ways:
     def do_longlist(self, arg):
         """
         {longlist|ll}
+
         List source code for the current function.
         
-        Differently than list, the whole function is displayed; the
-        current line is marked with '->'.  In case of post-mortem
-        debugging, the line which effectively raised the exception is
-        marked with '>>'.
+	The whole function is displayed unlike list. The current
+	line is marked with '->' or '>>' (in case of post-mortem
+	debugging, where '>>' indicates the line which raised
+	the exception. 
 
-        If the 'highlight' config option is set and pygments is
-        installed, the source code is colorized.
+	If pygments is installed and 'highlight' is set in config,
+	the source code will be colored.
         """
         self.lastcmd = 'longlist'
         self._printlonglist()
@@ -447,7 +453,7 @@ Frames can marked as hidden in the following ways:
     def do_debug(self, arg):
         # inside the original do_debug, there is a call to the global "Pdb" to
         # instantiate the recursive debugger: we want to intercept this call
-        # and instantiate *our* Pdb, passing the our custom config. So, we
+        # and instantiate *our* Pdb, passing our custom config. So, we
         # dynamically rebind the globals
         def new_pdb_with_config(*args):
             kwds = dict(Config=self.ConfigFactory)
@@ -465,18 +471,22 @@ Frames can marked as hidden in the following ways:
 
         Start an interative interpreter whose global namespace
         contains all the names found in the current scope.
+
+	For now, you can't go back to the debugger. Ctrl-D or exit() will 
+	exit the simulator. 
         """
         ns = self.curframe.f_globals.copy()
         ns.update(self.curframe.f_locals)
-        code.interact("*interactive*", local=ns)
+        code.interact("*FSDB Interactive Interpreter*", local=ns)
 
+    # Inspired from dependance graphs in PL.
     def do_track(self, arg):
         """
         track expression
 
         Display a graph showing which objects are referred by the
         value of the expression.  This command requires pypy to be in
-        the current PYTHONPATH.
+        the current PYTHONPATH. 
         """
         try:
             from rpython.translator.tool.reftracker import track
@@ -490,6 +500,7 @@ Frames can marked as hidden in the following ways:
         else:
             track(val)
 
+    # TODO: Fix this soon
     '''
     def _get_display_list(self):
         return self.display_list.setdefault(self.curframe, {})
@@ -510,7 +521,7 @@ Frames can marked as hidden in the following ways:
         watch expression
 
         Add expression to the display list; expressions in this list
-        are evaluated at each step, and printed every time its value
+        are evaluated at each step, and printed every time when its value
         changes.
         """
         try:
@@ -578,13 +589,14 @@ Frames can marked as hidden in the following ways:
         """
         sticky [start end]
 
-        Toggle sticky mode. When in sticky mode, it clear the screen
-        and longlist the current functions, making the source
-        appearing always in the same position. Useful to follow the
-        flow control of a function when doing step-by-step execution.
+	Toggle sticky mode. When in this mode, the screen is cleared
+	and the current function is long listed (making the source
+	appear in the same position of the screen all the time). 
+        Useful to follow the flow control of a function when doing 
+	step-by-step execution.
 
         If ``start`` and ``end`` are given, sticky mode is enabled and
-        only lines within that range (extremes included) will be
+        only lines within that range (extreme values included) will be
         displayed.
         """
         if arg:
@@ -681,7 +693,7 @@ Frames can marked as hidden in the following ways:
             print >>self.stdout, '*** Expected a number, got "{0}"'.format(arg)
             return
         if self.curindex - arg < 0:
-            print >> self.stdout, '*** Oldest frame'
+            print >>self.stdout, '*** Oldest frame'
         else:
             self.curindex = self.curindex - arg
             self.curframe = self.stack[self.curindex][0]
@@ -717,7 +729,6 @@ Frames can marked as hidden in the following ways:
         except:
             width = int(os.environ.get('COLUMNS', 80))
             height = int(os.environ.get('COLUMNS', 24))
-        # Work around above returning width, height = 0, 0 in Emacs
         width = width if width != 0 else 80
         height = height if height != 0 else 24
         return width, height
@@ -794,7 +805,7 @@ Frames can marked as hidden in the following ways:
 if hasattr(pdb, 'Restart'):
     Restart = pdb.Restart
 
-# copy some functions from pdb.py, but rebind the global dictionary
+# Functions from python's pdb.py. Rebind the global dictionary.
 for name in 'run runeval runctx runcall pm main'.split():
     func = getattr(pdb, name)
     globals()[name] = rebind_globals(func)
