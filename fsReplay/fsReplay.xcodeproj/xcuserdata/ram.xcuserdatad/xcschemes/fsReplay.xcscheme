@@ -13,10 +13,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4339502B83A4E42E5C10C767"
-               BuildableName = "NetAnim"
-               BlueprintName = "NetAnim"
-               ReferencedContainer = "container:NetAnim.xcodeproj">
+               BlueprintIdentifier = "2B066DB07621300D9B4A7A3B"
+               BuildableName = "fsReplay"
+               BlueprintName = "fsReplay"
+               ReferencedContainer = "container:fsReplay.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,10 +38,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4339502B83A4E42E5C10C767"
-            BuildableName = "NetAnim"
-            BlueprintName = "NetAnim"
-            ReferencedContainer = "container:NetAnim.xcodeproj">
+            BlueprintIdentifier = "2B066DB07621300D9B4A7A3B"
+            BuildableName = "fsReplay"
+            BlueprintName = "fsReplay"
+            ReferencedContainer = "container:fsReplay.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4339502B83A4E42E5C10C767"
-            BuildableName = "NetAnim"
-            BlueprintName = "NetAnim"
-            ReferencedContainer = "container:NetAnim.xcodeproj">
+            BlueprintIdentifier = "2B066DB07621300D9B4A7A3B"
+            BuildableName = "fsReplay"
+            BlueprintName = "fsReplay"
+            ReferencedContainer = "container:fsReplay.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
