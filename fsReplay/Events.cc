@@ -146,7 +146,7 @@ void AddEventsFromFile(ifstream& ifs)
 }
 
 
-int ProcessAllPending(NetModel* m, Time_t now)
+int ProcessAllPending(fsModel* m, Time_t now)
 {
   ReadEventsFromHandle(now);
   int nProcessed = 0;
@@ -188,7 +188,7 @@ TSPair_t GetEarliestEvent()
   return e;
 }
 
-void ProcessEvent(NetModel* m, const TSPair_t& e)
+void ProcessEvent(fsModel* m, const TSPair_t& e)
 {
   istringstream iss(e.second);
   

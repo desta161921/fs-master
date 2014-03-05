@@ -14,8 +14,8 @@
 #include <QScrollArea>
 #include <QResizeEvent>
 
-#include "NetView.h"
-#include "NetModel.h"
+#include "fsView.h"
+#include "fsModel.h"
 #include "Events.h"
 
 using namespace std;
@@ -23,8 +23,8 @@ using namespace std;
 int main(int argc, char** argv)
 {
   QApplication a(argc, argv);
-  NetView*  v = NetView::Create(&a);
-  NetModel* m = v->GetNetModel();
+  fsView*  v = fsView::Create(&a);
+  fsModel* m = v->GetNetModel();
   //v->SetViewSize(1024, 1024);
   v->SetViewSize(768, 768);
   v->SetUpdateInterval(0.001); // 1ms

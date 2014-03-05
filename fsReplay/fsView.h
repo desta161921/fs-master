@@ -15,25 +15,25 @@ class QTimer;
 class QLabel;
 class QSlider;
 
-#include "NetModel.h"
+#include "fsModel.h"
 
 #define MAX_SLIDER 21
 
-typedef std::pair<Time_t, NetModel> HistoryPair_t;
+typedef std::pair<Time_t, fsModel> HistoryPair_t;
 typedef std::deque<HistoryPair_t>   HistoryDeq_t;
 
-class NetView : public QWidget
+class fsView : public QWidget
 {
   Q_OBJECT
 public:
-  NetView(NetModel*, QWidget*);
+  fsView(fsModel*, QWidget*);
   void SetUpdateInterval(Time_t, bool = true);
   void StartAnimation(bool);
   void SetViewSize(int w, int h);
-  NetModel* GetNetModel();
+  fsModel* GetNetModel();
   void UpdateSimTime(Time_t);
   //void SetUpdateRate(int);
-  void AddHistory(Time_t, NetModel*);  // Add the current pixmap to the history
+  void AddHistory(Time_t, fsModel*);  // Add the current pixmap to the history
   //Inherited from QWidget
   void paintEvent(QPaintEvent*);
   void resizeEvent(QResizeEvent*);
@@ -47,7 +47,7 @@ public:
   int minH;                 // Minimum height
   QPixmap*     paintPM;     // The pixmap to paint
   int          historyIndex;// If >= 0, display from history
-  NetModel*    m;           // The corresponding model
+  fsModel*    m;           // The corresponding model
   QWidget*     mainWidget;  // Used in saving the png files for movies
   QScrollArea* sa;     
   QTimer*      timer;
@@ -70,7 +70,7 @@ private:
   double        updateRates[MAX_SLIDER];
 public:
   // Static methods
-  static NetView* Create(QApplication*); // Creates the view windows
+  static fsView* Create(QApplication*); // Creates the view windows
 public slots:
   void TimeToUpdate();
   void TimeToRecord();

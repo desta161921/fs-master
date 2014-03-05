@@ -8,7 +8,7 @@
 #include <string>
 #include <fstream>
 
-#include "NetModel.h"
+#include "fsModel.h"
 
 // Define a type for a timestamped time/string pair
 typedef std::pair<Time_t, std::string> TSPair_t;
@@ -20,7 +20,7 @@ void SetEventsFileHandle(int h);
 
 void AddEventsFromFile(std::ifstream&); // Read the file and add events
 
-int ProcessAllPending(NetModel*, Time_t); // Process all events with TS <= t
+int ProcessAllPending(fsModel*, Time_t); // Process all events with TS <= t
 
 void AddEvent(Time_t t, const std::string& s); // Add a new event
 
@@ -30,7 +30,6 @@ Time_t EarliestEventTime(); // Get time of earliest event
 
 TSPair_t GetEarliestEvent(); // Get and remove earliest event
 
-void ProcessEvent(NetModel* m, const TSPair_t& e); // Parse and process an event
+void ProcessEvent(fsModel* m, const TSPair_t& e); // Parse and process an event
 
 #endif
-

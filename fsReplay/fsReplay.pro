@@ -1,4 +1,4 @@
-SOURCES = NetAnim.cc NetModel.cc NetView.cc Events.cc
-HEADERS = NetModel.h NetView.h Events.h
+SOURCES = fsAnim.cc fsModel.cc fsView.cc Events.cc
+HEADERS = fsModel.h fsView.h Events.h
 CONFIG = qt warn_on debug
 

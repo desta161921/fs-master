@@ -1,14 +1,14 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'NetView.h'
+** Meta object code from reading C++ file 'fsView.h'
 **
 ** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.5)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "NetView.h"
+#include "fsView.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'NetView.h' doesn't include <QObject>."
+#error "The header file 'fsView.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63
 #error "This file was generated using the moc from 4.8.5. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -16,7 +16,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_NetView[] = {
+static const uint qt_meta_data_fsView[] = {
 
  // content:
        6,       // revision
@@ -30,28 +30,28 @@ static const uint qt_meta_data_NetView[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-       9,    8,    8,    8, 0x0a,
-      24,    8,    8,    8, 0x0a,
-      39,    8,    8,    8, 0x0a,
-      46,    8,    8,    8, 0x0a,
-      54,    8,    8,    8, 0x0a,
-      63,    8,    8,    8, 0x0a,
-      86,    8,    8,    8, 0x0a,
+       8,    7,    7,    7, 0x0a,
+      23,    7,    7,    7, 0x0a,
+      38,    7,    7,    7, 0x0a,
+      45,    7,    7,    7, 0x0a,
+      53,    7,    7,    7, 0x0a,
+      62,    7,    7,    7, 0x0a,
+      85,    7,    7,    7, 0x0a,
 
        0        // eod
 };
 
-static const char qt_meta_stringdata_NetView[] = {
-    "NetView\0\0TimeToUpdate()\0TimeToRecord()\0"
+static const char qt_meta_stringdata_fsView[] = {
+    "fsView\0\0TimeToUpdate()\0TimeToRecord()\0"
     "Play()\0Pause()\0Record()\0BackupSliderMoved(int)\0"
     "RateSliderMoved(int)\0"
 };
 
-void NetView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void fsView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         Q_ASSERT(staticMetaObject.cast(_o));
-        NetView *_t = static_cast<NetView *>(_o);
+        fsView *_t = static_cast<fsView *>(_o);
         switch (_id) {
         case 0: _t->TimeToUpdate(); break;
         case 1: _t->TimeToRecord(); break;
@@ -65,33 +65,33 @@ void NetView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
     }
 }
 
-const QMetaObjectExtraData NetView::staticMetaObjectExtraData = {
+const QMetaObjectExtraData fsView::staticMetaObjectExtraData = {
     0,  qt_static_metacall 
 };
 
-const QMetaObject NetView::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_NetView,
-      qt_meta_data_NetView, &staticMetaObjectExtraData }
+const QMetaObject fsView::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_fsView,
+      qt_meta_data_fsView, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &NetView::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &fsView::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *NetView::metaObject() const
+const QMetaObject *fsView::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *NetView::qt_metacast(const char *_clname)
+void *fsView::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_NetView))
-        return static_cast<void*>(const_cast< NetView*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_fsView))
+        return static_cast<void*>(const_cast< fsView*>(this));
     return QWidget::qt_metacast(_clname);
 }
 
-int NetView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int fsView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)

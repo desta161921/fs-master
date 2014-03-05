@@ -19,12 +19,12 @@
 #include <QSlider>
 #include <QLabel>
 #include <QScrollArea>
-#include "NetView.h"
+#include "fsView.h"
 #include "Events.h"
 
 using namespace std;
 
-NetView::NetView(NetModel* m0, QWidget* mw)
+fsView::fsView(fsModel* m0, QWidget* mw)
   : w(768), h(768), minW(w), minH(h),
     paintPM(nil), historyIndex(-1), m(m0), mainWidget(mw), sa(nil),
     simTimeWidget(nil), updateRate(nil), backupSlider(nil),
@@ -60,7 +60,7 @@ NetView::NetView(NetModel* m0, QWidget* mw)
 
 }
 
-void NetView::SetUpdateInterval(Time_t ui, bool moveSlider)
+void fsView::SetUpdateInterval(Time_t ui, bool moveSlider)
 {
   updateInterval = ui;
   if (timer && !paused)
@@ -87,7 +87,7 @@ void NetView::SetUpdateInterval(Time_t ui, bool moveSlider)
   updateRate->setText(oss.str().c_str());
 }
 
-void NetView::StartAnimation(bool unpause)
+void fsView::StartAnimation(bool unpause)
 {
   update(); // Show the time zero state
   if (unpause)
@@ -102,14 +102,14 @@ void NetView::StartAnimation(bool unpause)
     }
 }
 
-void NetView::SetViewSize(int w0, int h0)
+void fsView::SetViewSize(int w0, int h0)
 {
   minW = w0;
   minH = h0;
   if (w < minW) w = minW;
   if (h < minH) h = minH;
   setMinimumSize(minW, minH);
-  cout << "Setting min size, minw " << minW << ", minh " << minH << endl;
+  cout << "Setting min size -- minw " << minW << ", minh " << minH << endl;
   if (paintPM)
     {
       delete paintPM;
@@ -117,12 +117,12 @@ void NetView::SetViewSize(int w0, int h0)
     }
 }
 
-NetModel* NetView::GetNetModel()
+fsModel* fsView::GetNetModel()
 {
   return m;
 }
 
-void NetView::UpdateSimTime(Time_t now)
+void fsView::UpdateSimTime(Time_t now)
 {
   //cout << "Updating simtimewidget to " << now << endl;
   ostringstream oss;
@@ -131,7 +131,7 @@ void NetView::UpdateSimTime(Time_t now)
   simTimeWidget->setText(oss.str().c_str());
 }
 
-void NetView::AddHistory(Time_t now, NetModel* nm)
+void fsView::AddHistory(Time_t now, fsModel* nm)
 {
   // Add the history for backing up the simulation
   if (history.size() == maxHistorySize)
@@ -144,7 +144,7 @@ void NetView::AddHistory(Time_t now, NetModel* nm)
 }
 
 // Inherited from QWidget
-void NetView::paintEvent(QPaintEvent*)
+void fsView::paintEvent(QPaintEvent*)
 {
   if (!paintPM)
     { // Should not happen
@@ -157,7 +157,7 @@ void NetView::paintEvent(QPaintEvent*)
   p.drawPixmap(QPoint(0,0), *paintPM);
 }
 
-void NetView::resizeEvent(QResizeEvent*)
+void fsView::resizeEvent(QResizeEvent*)
 {
   //if (rev->size().width()  > minW) minW = rev->size().width();
   //if (rev->size().height() > minH) minH = rev->size().height();
@@ -165,9 +165,9 @@ void NetView::resizeEvent(QResizeEvent*)
   //     << " h " << h << endl;
 }
 
-void NetView::update()
+void fsView::update()
 {
-  NetModel* nm = m; // Use current net model unless history
+  fsModel* nm = m; // Use current net model unless history
 
   if (historyIndex >= 0)
     {
@@ -197,7 +197,7 @@ void NetView::update()
   for (NodeMap_t::iterator i = nm->allNodes.begin();
        i != nm->allNodes.end(); ++i)
     {
-      NetNode& n = i->second;
+      fsNode& n = i->second;
       //cout << "Drawing node at x " << n.x << " y " << n.y << endl;
       nodeRect.moveTopLeft(ToPixels(QPointF(n.x, n.y)) - 
                            QPointF(nodeRadius, nodeRadius));
@@ -206,13 +206,13 @@ void NetView::update()
   // Now links
   for (LinkVec_t::size_type i = 0; i < nm->allLinks.size(); ++i)
     {
-      NetWiredLink lk = nm->allLinks[i];
+      fsWiredLink lk = nm->allLinks[i];
       // Since we have two instances of each link, only draw it if
       // the n1 id is < n2 id
       if (lk.n1 < lk.n2)
         {
-          NetNode& nn1 = nm->GetNode(lk.n1);
-          NetNode& nn2 = nm->GetNode(lk.n2);
+          fsNode& nn1 = nm->GetNode(lk.n1);
+          fsNode& nn2 = nm->GetNode(lk.n2);
           QPointF n1 = ToPixels(nn1.GetLoc2d());
           QPointF n2 = ToPixels(nn2.GetLoc2d());
           //cout << "Drawing Line x0 " << n1.x() << " y0 " << n1.y()
@@ -227,13 +227,13 @@ void NetView::update()
   p.setOpacity(0.7); // Allows the wire to show through a bit
   for (PktMap_t::iterator i = nm->allPkts.begin(); i != nm->allPkts.end(); ++i)
     {
-      NetWiredPacket pkt = i->second;
+      fsWiredPacket pkt = i->second;
       // Make sure still visible (currentTime < lbRx)
       if (pkt.lbRx <= currentTime) continue; // In the past
       if (pkt.fbTx > currentTime) continue;  // In the future
 
-      NetNode& n1 = nm->GetNode(pkt.txNode);
-      NetNode& n2 = nm->GetNode(pkt.rxNode);
+      fsNode& n1 = nm->GetNode(pkt.txNode);
+      fsNode& n2 = nm->GetNode(pkt.rxNode);
       QPointF n1Loc = ToPixels(n1.GetLoc2d());
       QPointF n2Loc = ToPixels(n2.GetLoc2d());
 
@@ -284,7 +284,7 @@ void NetView::update()
 }
 
 // Private methods
-QPointF NetView::ToPixels(QPointF loc)
+QPointF fsView::ToPixels(QPointF loc)
 {
   if (viewRect.isEmpty()) viewRect = m->GetBoundingRect();
   double w1 = viewRect.width();
@@ -421,12 +421,12 @@ static const char *record_xpm[] = {
 } ;
 
 
-NetView* NetView::Create(QApplication* app)
+fsView* fsView::Create(QApplication* app)
 {
   QWidget* mw = new QWidget();
   mw->resize(768, 768);
-  NetModel* m = new NetModel();
-  NetView*  v = new NetView(m, mw);
+  fsModel* m = new fsModel();
+  fsView*  v = new fsView(m, mw);
   mw->setWindowTitle("fsReplay - Network Animator");
   // Try making layouts
   QVBoxLayout* vbox = new QVBoxLayout();
@@ -476,7 +476,7 @@ NetView* NetView::Create(QApplication* app)
 }
 
 // Slots
-void NetView::TimeToUpdate()
+void fsView::TimeToUpdate()
 {
   //cout << "Advancing time by " << updateInterval;
   m->AdvanceTime(updateInterval);
@@ -485,7 +485,7 @@ void NetView::TimeToUpdate()
   update();
 }
 
-void NetView::TimeToRecord()
+void fsView::TimeToRecord()
 { // Grab the widget and record here
   QPixmap pixmap = QPixmap::grabWidget(mainWidget);
   static int frameNumber = 0;
@@ -502,7 +502,7 @@ void NetView::TimeToRecord()
 }
 
   
-void NetView::Play()
+void fsView::Play()
 {
   paused = false;
   int ms = (int)(updateInterval * 1000.0);
@@ -514,13 +514,13 @@ void NetView::Play()
   historyIndex = -1;
 }
 
-void NetView::Pause()
+void fsView::Pause()
 {
   paused = true;
   timer->stop();
 }
 
-void NetView::Record()
+void fsView::Record()
 { // not coded yet
   cout << "Start recording here" << endl;
   if (recordTimer->isActive())
@@ -537,7 +537,7 @@ void NetView::Record()
 }
 
   
-void NetView::BackupSliderMoved(int value)
+void fsView::BackupSliderMoved(int value)
 {
   paused = true;
   timer->stop();
@@ -556,7 +556,7 @@ void NetView::BackupSliderMoved(int value)
     }
 }
 
-void NetView::RateSliderMoved(int value)
+void fsView::RateSliderMoved(int value)
 {
   SetUpdateInterval(updateRates[value], false);
 }
