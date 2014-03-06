@@ -24,7 +24,8 @@
 - Extensive post-mortem
 - Enable/disable break points on the fly
 - Trace packet through the network
+- Packet replay feature added
 
 TODO:
  
-- Packet replay for pre-/post-config change detection
+- Diff capability for pre-/post-config change detection
