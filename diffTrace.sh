@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="Usage: `basename $0` [-hv] <trace>"
+USAGE="Usage: `basename $0` [-hv] <trace(s)>"
 
 # Parse command line options.
 while getopts hv: OPT; do
@@ -29,5 +29,14 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-echo "Starting fsReplay for $@..."
-./fsReplay/fsReplay $@
+d=$PWD
+
+for i in $@
+do
+    file+="$d/$i "
+done
+
+echo "Starting fsDiff for files in \"$@\""
+
+# d can take flowlet, counter, all
+python fsDiff/diff.py -d "all" -f $file
