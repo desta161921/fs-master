@@ -256,7 +256,7 @@ class OpenflowSwitch(Node):
 
         if input_intf is None:
             input_intf = self.trafgen_ip
-
+	
 	if self.tracePkt:
 	    self.packetInDebugger(flowlet, prevnode, destnode, input_intf)
 	

@@ -130,6 +130,7 @@ class Compute:
 	    int5=m.group(7)
             int6=m.group(8)
 	    return ip1+':'+int3+'-'+ip2+':'+int4,int1,int2,int6,int5 
+
 def report(line):
     print line
 
@@ -198,6 +199,8 @@ def processFiles(d, wTD):
   	report("** Average Packets Per Second {} **".format(key2))	
 	C2.getPps()
 
+	# TODO: write logic to compare C1 and C2 after computing everything
+
     if wTD=='all' or wTD=='flowlet':
         report("\n========== Performance Comparison for flowlets ==========")
 	C1 = Compute(key1, wTD, L_1)
@@ -226,6 +229,12 @@ def processFiles(d, wTD):
   	report("** Average Packets Per Second {} **".format(key2))	
 	C2.getPps()
 
+	# TODO: write logic to compare C1 and C2 after computing everything
+
+    if wTD=='all' or wTD=='rule':
+        report("\n========== Comparison of Rules/Actions ==========")
+	
+	
 def main(whatToDiff, folderList):
     d = defaultdict(list)    
     for fo in folderList:
@@ -234,7 +243,8 @@ def main(whatToDiff, folderList):
 		d[fo].append(fi)
             if whatToDiff == "flowlet" and fi.endswith("_flow.txt"):
 		d[fo].append(fi)
-	    # Add new option for actions/flows
+	    if whatToDiff == "rule" and fi.endswith("_rules.txt"):
+		d[fo].append(fi)
             if whatToDiff == "all":
 		d[fo].append(fi)
 
@@ -246,7 +256,7 @@ def main(whatToDiff, folderList):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--diff',
-		      help="What to diff? 'flowlets' or 'counters'",
+		      help="What to diff? 'flowlet', 'counter', 'rule' or 'all'",
 		      dest="diff")
     parser.add_argument("-f", "--folder", nargs='+',
 		      help="Trace folders",
