@@ -40,4 +40,4 @@ echo "Starting fsDiff for files in \"$@\""
 
 # d can take flowlet, counter, rule, all
 # f can take two folder names that contains the traces
-python fsDiff/diff.py -d "all" -f $file
+python fsDiff/diff.py -d "all" -f $file > DiffReport.txt

@@ -8,6 +8,7 @@ import os
 from collections import defaultdict
 import difflib
 import re
+from datadiff import diff as di
 
 class Compute:
     def __init__(self, key, wTD, switches):
@@ -80,25 +81,43 @@ class Compute:
 	for k,v in self.Bps.iteritems():
 	    print "{} - {}".format(k,v)
 
+    def _getBps(self):
+	return self.Bps
+
     def getPps(self):
 	for k,v in self.Pps.iteritems():
 	    print "{} - {}".format(k,v)
+	
+    def _getPps(self):
+	return self.Pps
 
     def getFps(self):
 	for k,v in self.Fps.iteritems():
 	    print "{} - {}".format(k,v)
+
+    def _getFps(self):
+	return self.Fps
 			 
     def getArrival(self):
 	for k,v in self.sTime.iteritems():
 	    print "{} - {}".format(k,v)
 
+    def _getArrival(self):
+	return self.sTime
+
     def getDeparture(self):
 	for k,v in self.fTime.iteritems():
 	    print "{} - {}".format(k,v)
 
+    def _getDeparture(self):
+	return self.fTime
+
     def getProcessing(self):
 	for k,v in self.pTime.iteritems():
 	    print "{} - {}".format(k,v)
+
+    def _getProcessing(self):
+	return self.pTime
 
     def regexMatchCounter(self, txt):
 	re1='.*?((?:[a-z][a-z0-9_]*)).*?((?:[a-z][a-z0-9_]*)).*?(\\d+).*?(\\d+).*?(\\d+)'
@@ -130,6 +149,9 @@ class Compute:
 	    int5=m.group(7)
             int6=m.group(8)
 	    return ip1+':'+int3+'-'+ip2+':'+int4,int1,int2,int6,int5 
+
+# change this into a file -- report
+# For now, just redirect outside
 
 def report(line):
     print line
@@ -199,8 +221,13 @@ def processFiles(d, wTD):
   	report("** Average Packets Per Second {} **".format(key2))	
 	C2.getPps()
 
-	# TODO: write logic to compare C1 and C2 after computing everything
-
+	report("\nFlows per Second")
+   	report(di(C1._getFps(), C2._getFps()))
+	report("\nBytes per Second")
+   	report(di(C1._getBps(), C2._getBps()))
+	report("\nPackets per Second")
+   	report(di(C1._getPps(), C2._getPps()))
+	
     if wTD=='all' or wTD=='flowlet':
         report("\n========== Performance Comparison for flowlets ==========")
 	C1 = Compute(key1, wTD, L_1)
@@ -229,11 +256,19 @@ def processFiles(d, wTD):
   	report("** Average Packets Per Second {} **".format(key2))	
 	C2.getPps()
 
-	# TODO: write logic to compare C1 and C2 after computing everything
+  	report("\nFlow Arrival Time")	
+	report(di(C1._getArrival(), C2._getArrival()))
+  	report("\nFlow Departure Time")	
+	report(di(C1._getDeparture(), C2._getDeparture()))
+  	report("\nFlow Processing Time")	
+	report(di(C1._getProcessing(), C2._getProcessing()))
+	report("\nBytes per Second")
+   	report(di(C1._getBps(), C2._getBps()))
+	report("\nPackets per Second")
+   	report(di(C1._getPps(), C2._getPps()))
 
     if wTD=='all' or wTD=='rule':
         report("\n========== Comparison of Rules/Actions ==========")
-	
 	
 def main(whatToDiff, folderList):
     d = defaultdict(list)    
