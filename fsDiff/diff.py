@@ -21,6 +21,7 @@ class Compute:
 	self.sTime = {}
 	self.fTime = {}
 	self.pTime = {}
+	self.ra = defaultdict(list)
 
     def getSwitches(self):
 	return self.switches
@@ -76,6 +77,23 @@ class Compute:
 	    self.Bps[switch] = bps/counter
 	    self.Pps[switch] = pps/counter
 	    self.Fps[switch] = fps/counter
+
+    def computeRule(self):
+	for switch in self.getSwitches():
+	    fName = self.getKey()+"/"+switch+"_rules.txt"
+	    with open(fName, 'r') as fi:
+		for f in fi:
+		    sd = None
+		    rule = None
+		    line = f.strip()
+		    try:
+		        sd,rule = line.split('. Flow table match for flowlet ')
+			self.ra[sd].append(rule)
+		    except:
+			self.ra[sd].append(None)
+
+    def getRA(self):
+	return self.ra
 
     def getBps(self):
 	for k,v in self.Bps.iteritems():
@@ -162,12 +180,7 @@ def switchSimilarity(L_1, L_2):
     L_2 = set(intern(w) for w in L_2)
     c2 = L_1.difference(L_2)
     c1 = L_2.difference(L_1) 
-
-    for w in c1:
-        res = difflib.get_close_matches(w, c2)
-        if len(res):
-            against.remove( res[0] )
-    return list(c1), list(c2), (len(L_2)-len(c2)) / (len(L_1))
+    return list(c1), list(c2)
 
 def processFiles(d, wTD):
     key1, value1 = d.popitem()
@@ -188,12 +201,14 @@ def processFiles(d, wTD):
     if wTD=='all':
 	L_1 = list(set(L_1))
 	L_2 = list(set(L_2))
+
     L1_and_L2 = list(set(L_1) & set(L_2))
 
-    c1, c2, diff = switchSimilarity(L_1, L_2)
-    if diff == 0:
+    c1, c2 = switchSimilarity(L_1, L_2)
+
+    if L_1 == L_2:
 	report("** Same Switches **")
-    if diff == 1:
+    else:
 	report("** Different Swiches **")
 	if len(c1):
 	    report("Configuration in {} has extra switches -- {}".format(key1,','.join(c1)))
@@ -269,6 +284,14 @@ def processFiles(d, wTD):
 
     if wTD=='all' or wTD=='rule':
         report("\n========== Comparison of Rules/Actions ==========")
+    	C1 = Compute(key1, wTD, L_1)
+	C1.computeRule()
+
+	C2 = Compute(key2, wTD, L_2)
+	C2.computeRule()
+
+  	report("\nThe following rules are different:")	
+	report(di(C1.getRA(), C2.getRA()))
 	
 def main(whatToDiff, folderList):
     d = defaultdict(list)    

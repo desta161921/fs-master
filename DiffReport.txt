@@ -1,6 +1,6 @@
 
 ========== Comparing Number of Switches ==========
-** Different Swiches **
+** Same Switches **
 
 ========== Performance Comparison for counters ==========
 ** Average Flows Per Second for /Users/ram/Desktop/RAM/Project/fs-master/TD2 **
@@ -188,3 +188,6 @@ Packets per Second
 }
 
 ========== Comparison of Rules/Actions ==========
+
+The following rules are different:
+

@@ -237,16 +237,18 @@ class OpenflowSwitch(Node):
 	''' Packet trace logic to trace at the flowlet level '''
 	# Needs to be changed if controller messages are to be ignored
 	# Wrote this way because it will be easier to extend this to a replay capability
-
 	input_port = None
 	table_entry = 'No match'
 	actions = None
+	printString = None
 	if isinstance(flowlet,PoxFlowlet):
 	    input_port = self.interface_to_port_map[input_intf]
 	    table_entry = self.pox_switch.table.entry_for_packet(flowlet.origpkt, input_port)
-            self.logger.info("'{}' to '{}' using {}:{}. Flow table match for flowlet {} {} {} (packet {}): {}".format(prevnode, destnode, input_intf, input_port, flowlet.srcmac, flowlet.dstmac, str(flowlet), flowlet.origpkt, table_entry))
+            printString = "'{}' to '{}' via '{}'. Flow table match for flowlet {} {} {} (packet {}): {}".format(prevnode, destnode, self.name, flowlet.srcmac, flowlet.dstmac, str(flowlet), flowlet.origpkt, table_entry)
 	else:
-	    self.logger.info("'{}' to '{}' using {}:{}".format(prevnode, destnode, input_intf, input_port))
+	    printString = "'{}' to '{}' via '{}'.".format(prevnode, destnode, self.name)
+	self.logger.info(printString)
+
 	from fsdb import pdb as bp
 	bp.set_trace()
 	
