@@ -1,4 +1,3 @@
-
 ========== Comparing Number of Switches ==========
 ** Same Switches **
 
@@ -189,5 +188,6 @@ Packets per Second
 
 ========== Comparison of Rules/Actions ==========
 
-The following rules are different:
+The following rules are different in Config D1 (w.r.t. Config D2):
 
+The following rules are different in Config D2 (w.r.t. Config D1):

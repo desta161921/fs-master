@@ -89,9 +89,11 @@ class Compute:
 		    line = f.strip()
 		    try:
 		        sd,rule = line.split('. Flow table match for flowlet ')
-			self.ra[sd].append(rule)
+			tmpDict = self.getRA()
+			if not any(value == rule for value in tmpDict[sd]):
+			    self.ra[sd].append(rule)
 		    except:
-			self.ra[sd].append(None)
+			continue
 
     def getRA(self):
 	return self.ra
@@ -195,7 +197,7 @@ def processFiles(d, wTD):
     # key1 contains config 1's location
     # key2 contains config 2's location
  
-    report("\n========== Comparing Number of Switches ==========")
+    report("========== Comparing Number of Switches ==========")
     L_1 = [i.split('_', 1)[0] for i in value1]
     L_2 = [i.split('_', 1)[0] for i in value2]
 
@@ -291,9 +293,35 @@ def processFiles(d, wTD):
 	C2 = Compute(key2, wTD, L_2)
 	C2.computeRule()
 
-  	report("\nThe following rules are different:")	
-	report(di(C1.getRA(), C2.getRA()))
-	
+	D1 = C1.getRA()
+	D2 = C2.getRA()
+
+  	report("\nThe following rules are different in Config D1 (w.r.t. Config D2):")	
+	for key in D1.keys():
+	    try:
+	        tV1 = D1[key]
+	        tV2 = D2[key]
+   	        if tV1 != tV2 and tV1 and tV2:
+		    report("Flow: {}, Rule in D1: {}, Changed Rule in D2: {}".format(key, tV1, tV2))
+	    except:
+		if tV1 is None:
+		    report("There is no rule in Config1 for flow {}, Changed Rule in D2: {}".format(key, tV2))
+		if tV2 is None:
+		    report("There is no rule in Config2 for flow {}, Changed Rule in D1: {}".format(key, tV1))
+		    
+  	report("\nThe following rules are different in Config D2 (w.r.t. Config D1):")	
+	for key in D2.keys():
+	    try:
+	        tV1 = D1[key]
+	        tV2 = D2[key]
+   	        if tV1 != tV2 and tV1 and tV2:
+		    report("Flow: {}, Rule in D2: {}, Changed Rule in D1: {}".format(key, tV2, tV1))
+	    except:
+		if tV1 is None:
+		    report("There is no rule in Config1 for flow {}, Changed Rule in D2: {}".format(key, tV2))
+		if tV2 is None:
+		    report("There is no rule in Config2 for flow {}, Changed Rule in D1: {}".format(key, tV1))
+
 def main(whatToDiff, folderList):
     d = defaultdict(list)    
     for fo in folderList:
