@@ -77,7 +77,8 @@ class Compute:
 	    self.Bps[switch] = bps/counter
 	    self.Pps[switch] = pps/counter
 	    self.Fps[switch] = fps/counter
-
+    
+    # Very crude - needs expansion
     def computeRule(self):
 	for switch in self.getSwitches():
 	    fName = self.getKey()+"/"+switch+"_rules.txt"
