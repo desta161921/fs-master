@@ -10,7 +10,6 @@ Note: the originally released version of fs (as described in the INFOCOM '11)
 research paper is on branch fs-orig.  The master branch is completely revamped
 and includes the fs-sdn code as described in a forthcoming HotSDN paper (fs-sdn).
 
-
 ## Running fs
 
 FS is implemented in Python and has a few external module dependencies:
