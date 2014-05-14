@@ -1,5 +1,5 @@
 import sys
-
+import pdb
 from socket import IPPROTO_TCP, IPPROTO_UDP, IPPROTO_ICMP
 import logging
 from ipaddr import IPv4Address
@@ -188,6 +188,7 @@ class OpenflowSwitch(Node):
             return
 
         pinfo = self.ports[port_num]
+
         # self.logger.debug("Switch sending translated packet {}->{} from {}->{} on port {} to {}".format(packet, flet, flet.srcmac, flet.dstmac, port_num, pinfo.link.egress_name))
         pinfo.link.flowlet_arrival(flet, self.name, pinfo.remoteip)
 
@@ -249,13 +250,12 @@ class OpenflowSwitch(Node):
 	    printString = "'{}' to '{}' via '{}'.".format(prevnode, destnode, self.name)
 	self.logger.info(printString)
 
-	from fsdb import pdb as bp
-	bp.set_trace()
+	# from fsdb import pdb as bp
+	# bp.set_trace()
 	
     def flowlet_arrival(self, flowlet, prevnode, destnode, input_intf=None):
         '''Incoming flowlet: determine whether it's a data plane flowlet or whether it's an OF message
         coming back from the controller'''
-
         if input_intf is None:
             input_intf = self.trafgen_ip
 	

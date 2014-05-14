@@ -40,17 +40,16 @@ graph test {
 
     controller [
         type="OpenflowController"
-	components="pox.forwarding.l2_learning"
+	components="pox.forwarding.micro1_after"
     ];
 
-
     // data path links 
-    a -- b [weight=10, capacity=100000000, delay=0.043];
-    b -- c [weight=10, capacity=100000000, delay=0.031];
-    a -- c [weight=30, capacity=100000000, delay=0.123];
+    a -- b [weight=10, capacity=100000000, delay=0.04];
+    b -- c [weight=10, capacity=100000000, delay=0.04];
+    a -- c [weight=10, capacity=100000000, delay=0.04];
 
     // control links between ofcontroller and each ofswitch
-    a -- controller [ capacity=1000000000, delay=0.01 ]
-    b -- controller [ capacity=1000000000, delay=0.01 ]
-    c -- controller [ capacity=1000000000, delay=0.01 ]
+    a -- controller [ capacity=1000000000, delay=1.00 ]
+    b -- controller [ capacity=1000000000, delay=10.0 ]
+    c -- controller [ capacity=1000000000, delay=1.00 ]
 }

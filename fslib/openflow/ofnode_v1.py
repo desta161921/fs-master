@@ -5,7 +5,6 @@ from fslib.common import fscore, get_logger
 from ofmessage_v1 import *
 
 import networkx
-
 from pox.openflow.flow_table import SwitchFlowTable
 from pox.openflow.libopenflow_01 import *
 
