@@ -7,7 +7,6 @@ from fslib.common import fscore
 import copy
 import re
 
-
 # FIXME
 haveIPAddrGen = False
 
@@ -228,7 +227,6 @@ class SimpleTrafficGenerator(TrafficGenerator):
 
 
         destnode = fscore().topology.destnode(self.srcnode, f.dstaddr)
-
         # print 'rawflow:',f
         # print 'destnode:',destnode
 

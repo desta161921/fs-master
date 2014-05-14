@@ -90,7 +90,6 @@ class HarpoonTrafficGenerator(TrafficGenerator):
 
         flet = self.__makeflow()
         self.activeflows[flet.key] = 1
-
         destnode = fscore().topology.destnode(self.srcnode, flet.dstaddr)
         owd = fscore().topology.owd(self.srcnode, destnode)
 
